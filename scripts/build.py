@@ -36,6 +36,8 @@ def build(sources, destination, root):
     destination.mkdir(parents=True)
     for name in ("index.html", "styles.css", "app.js", "favicon.svg"):
         shutil.copy2(root/name, destination/name)
+    if (root/"assets").is_dir():
+        shutil.copytree(root/"assets", destination/"assets")
     (destination/".nojekyll").write_text("", encoding="utf-8")
     links = [DOMAIN+"/"]
     for slug, repo in SITES.items():
