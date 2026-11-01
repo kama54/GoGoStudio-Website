@@ -1,0 +1,62 @@
+name: Publier GoGoStudio et les trois sites
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '17 5 * * *'
+permissions:
+  contents: read
+concurrency:
+  group: gogostudio-pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Site GoGoStudio
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Site officiel Stopododo
+        uses: actions/checkout@v4
+        with:
+          repository: kama54/Stopododo-Website
+          ref: main
+          path: sources/stopododo
+          persist-credentials: false
+      - name: Site officiel ClikoSpido
+        uses: actions/checkout@v4
+        with:
+          repository: kama54/ClikoSpido-Website
+          ref: main
+          path: sources/clikospido
+          persist-credentials: false
+      - name: Site officiel ZAPIKI
+        uses: actions/checkout@v4
+        with:
+          repository: kama54/Zapiki-Website
+          ref: main
+          path: sources/zapiki
+          persist-credentials: false
+      - name: Assembler le site
+        run: python3 scripts/build.py --sources sources --destination dist
+      - name: Configurer GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Préparer les fichiers de publication
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Déployer GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
