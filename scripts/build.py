@@ -33,11 +33,11 @@ def mirror(source, target, repo, slug):
             f.write_text(replacement, encoding="utf-8")
 
 
-def unpack_zapiki_preview(target):
-    """Unpack exactly the trusted, expected image paths for the temporary preview."""
+def unpack_zapiki_artwork(target):
+    """Unpack exactly the expected ZAPIKI images for production and preview."""
     archive = target/"assets"/"zapiki-visuels-webp.zip"
     if not archive.is_file():
-        raise FileNotFoundError(f"Missing preview artwork archive: {archive}")
+        raise FileNotFoundError(f"Missing ZAPIKI artwork archive: {archive}")
     expected = {f"{lang}/{i:02d}.webp" for lang in LANGS for i in range(1,8)}
     expected.update({"cinema.webp", "icone-source.webp"})
     output = target/"assets"/"promo"
@@ -45,14 +45,14 @@ def unpack_zapiki_preview(target):
         names = set(bundle.namelist())
         missing = sorted(expected - names)
         if missing:
-            raise ValueError(f"ZAPIKI preview ZIP missing {len(missing)} images: {missing[:10]}")
+            raise ValueError(f"ZAPIKI artwork ZIP missing {len(missing)} images: {missing[:10]}")
         for name in sorted(expected):
             item = output/name
             item.parent.mkdir(parents=True, exist_ok=True)
             with bundle.open(name) as input_file, item.open("wb") as output_file:
                 shutil.copyfileobj(input_file, output_file)
     archive.unlink()
-    print("OK: ZAPIKI preview 70 visuals plus 2 supplemental images")
+    print("OK: ZAPIKI 70 visuals plus 2 supplemental images")
 
 def build_preview(sources, destination):
     """Publish an isolated noindex preview without changing the current public ZAPIKI site."""
@@ -61,7 +61,7 @@ def build_preview(sources, destination):
         return
     target = destination/"apercu-zapiki"
     mirror(source, target, "Zapiki-Website", "apercu-zapiki")
-    unpack_zapiki_preview(target)
+    unpack_zapiki_artwork(target)
     count = 0
     for html_file in target.rglob("*.html"):
         page = html_file.read_text(encoding="utf-8")
@@ -91,6 +91,8 @@ def build(sources, destination, root):
     for slug, repo in SITES.items():
         target = destination/slug
         mirror(sources/slug, target, repo, slug)
+        if slug == "zapiki":
+            unpack_zapiki_artwork(target)
         links.append(f"{DOMAIN}/{slug}/")
         if slug in {"stopododo", "clikospido"}:
             for lang in LANGS:
@@ -98,6 +100,19 @@ def build(sources, destination, root):
                     raise ValueError(f"Missing {lang} translation in {slug}")
                 links.append(f"{DOMAIN}/{slug}/{lang}/index.html")
         else:
+            for lang in LANGS:
+                if not (target/lang/"index.html").is_file():
+                    raise ValueError(f"Missing ZAPIKI translation: {lang}")
+                links.append(f"{DOMAIN}/{slug}/{lang}/index.html")
+                guides_dir = target/lang/"guides"
+                if not (guides_dir/"index.html").is_file():
+                    raise ValueError(f"Missing ZAPIKI guides hub: {lang}")
+                links.append(f"{DOMAIN}/{slug}/{lang}/guides/")
+                guide_pages = sorted(g for g in guides_dir.iterdir() if g.is_dir() and (g/"index.html").is_file())
+                if len(guide_pages) != 10:
+                    raise ValueError(f"Expected 10 ZAPIKI guides for {lang}, found {len(guide_pages)}")
+                for guide_dir in guide_pages:
+                    links.append(f"{DOMAIN}/{slug}/{lang}/guides/{guide_dir.name}/")
             for page in ("confidentialite.html", "conditions.html", "suppression-compte.html"):
                 if not (target/page).is_file():
                     raise ValueError(f"Missing legal page {page} in ZAPIKI")
