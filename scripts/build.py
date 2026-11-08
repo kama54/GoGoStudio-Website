@@ -2,6 +2,7 @@
 """Assemble GoGoStudio without modifying the three original repositories."""
 import argparse
 import shutil
+import zipfile
 from pathlib import Path
 from xml.sax.saxutils import escape
 
@@ -30,6 +31,32 @@ def mirror(source, target, repo, slug):
         if original != replacement:
             f.write_text(replacement, encoding="utf-8")
 
+
+def unpack_zapiki_promo(target):
+    """Expand optimized artwork after mirroring, without shipping a duplicate ZIP."""
+    homepage = target/"index.html"
+    if not homepage.is_file() or "z-promo-gallery" not in homepage.read_text(encoding="utf-8"):
+        return
+    archive = target/"assets"/"zapiki-visuels-webp.zip"
+    if not archive.is_file():
+        raise FileNotFoundError("ZAPIKI premium site needs assets/zapiki-visuels-webp.zip")
+    output = target/"assets"/"promo"
+    required = {f"{lang}/{n:02d}.webp" for lang in LANGS for n in range(1, 8)}
+    required.add("cinema.webp")
+    required.add("icone-source.webp")
+    with zipfile.ZipFile(archive) as zip_file:
+        actual = set(zip_file.namelist())
+        missing = required - actual
+        if missing:
+            raise ValueError(f"ZAPIKI promotional archive missing: {sorted(missing)}")
+        for name in sorted(required):
+            dest = output/name
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            with zip_file.open(name) as source, dest.open("wb") as result:
+                shutil.copyfileobj(source, result)
+    archive.unlink()
+    print("OK ZAPIKI: 70 localized promotional visuals and 2 artworks unpacked")
+
 def build(sources, destination, root):
     if destination.exists():
         shutil.rmtree(destination)
@@ -43,6 +70,8 @@ def build(sources, destination, root):
     for slug, repo in SITES.items():
         target = destination/slug
         mirror(sources/slug, target, repo, slug)
+        if slug == "zapiki":
+            unpack_zapiki_promo(target)
         links.append(f"{DOMAIN}/{slug}/")
         if slug in {"stopododo", "clikospido"}:
             for lang in LANGS:
