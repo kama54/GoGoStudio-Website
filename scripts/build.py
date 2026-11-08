@@ -83,6 +83,14 @@ def build(sources, destination, root):
             for lang in LANGS:
                 if (target/lang/"index.html").is_file():
                     links.append(f"{DOMAIN}/{slug}/{lang}/index.html")
+                # Include the 10 localized IPTV guides (if the premium ZAPIKI site has been merged).
+                guides_dir = target/lang/"guides"
+                if (guides_dir/"index.html").is_file():
+                    links.append(f"{DOMAIN}/{slug}/{lang}/guides/")
+                    for guide_dir in sorted(guides_dir.iterdir()):
+                        if guide_dir.is_dir() and (guide_dir/"index.html").is_file():
+                            links.append(f"{DOMAIN}/{slug}/{lang}/guides/{guide_dir.name}/")
+
             for page in ("confidentialite.html", "conditions.html", "suppression-compte.html"):
                 if not (target/page).is_file():
                     raise ValueError(f"Missing legal page {page} in ZAPIKI")
