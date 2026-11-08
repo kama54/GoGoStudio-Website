@@ -50,6 +50,10 @@ def build(sources, destination, root):
                     raise ValueError(f"Missing {lang} translation in {slug}")
                 links.append(f"{DOMAIN}/{slug}/{lang}/index.html")
         else:
+            # Localized ZAPIKI landing pages are optional until the redesigned site is merged.
+            for lang in LANGS:
+                if (target/lang/"index.html").is_file():
+                    links.append(f"{DOMAIN}/{slug}/{lang}/index.html")
             for page in ("confidentialite.html", "conditions.html", "suppression-compte.html"):
                 if not (target/page).is_file():
                     raise ValueError(f"Missing legal page {page} in ZAPIKI")
