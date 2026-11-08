@@ -2,6 +2,8 @@
 """Assemble GoGoStudio without modifying the three original repositories."""
 import argparse
 import shutil
+import re
+import zipfile
 from pathlib import Path
 from xml.sax.saxutils import escape
 
@@ -30,6 +32,52 @@ def mirror(source, target, repo, slug):
         if original != replacement:
             f.write_text(replacement, encoding="utf-8")
 
+
+def unpack_zapiki_preview(target):
+    """Unpack exactly the trusted, expected image paths for the temporary preview."""
+    archive = target/"assets"/"zapiki-visuels-webp.zip"
+    if not archive.is_file():
+        raise FileNotFoundError(f"Missing preview artwork archive: {archive}")
+    expected = {f"{lang}/{i:02d}.webp" for lang in LANGS for i in range(1,8)}
+    expected.update({"cinema.webp", "icone-source.webp"})
+    output = target/"assets"/"promo"
+    with zipfile.ZipFile(archive) as bundle:
+        names = set(bundle.namelist())
+        missing = sorted(expected - names)
+        if missing:
+            raise ValueError(f"ZAPIKI preview ZIP missing {len(missing)} images: {missing[:10]}")
+        for name in sorted(expected):
+            item = output/name
+            item.parent.mkdir(parents=True, exist_ok=True)
+            with bundle.open(name) as input_file, item.open("wb") as output_file:
+                shutil.copyfileobj(input_file, output_file)
+    archive.unlink()
+    print("OK: ZAPIKI preview 70 visuals plus 2 supplemental images")
+
+def build_preview(sources, destination):
+    """Publish an isolated noindex preview without changing the current public ZAPIKI site."""
+    source = sources/"zapiki-preview"
+    if not (source/"index.html").is_file():
+        return
+    target = destination/"apercu-zapiki"
+    mirror(source, target, "Zapiki-Website", "apercu-zapiki")
+    unpack_zapiki_preview(target)
+    count = 0
+    for html_file in target.rglob("*.html"):
+        page = html_file.read_text(encoding="utf-8")
+        new_page, changed = re.subn(r'<meta\s+name="robots"\s+content="[^"]*"\s*/?>',
+                                    '<meta name="robots" content="noindex,nofollow">',
+                                    page, count=1)
+        if not changed:
+            new_page = page.replace("<head>", '<head><meta name="robots" content="noindex,nofollow">', 1)
+        html_file.write_text(new_page, encoding="utf-8")
+        count += 1
+    for lang in LANGS:
+        assert (target/lang/"index.html").is_file(), f"Missing preview locale {lang}"
+        assert all((target/"assets"/"promo"/lang/f"{i:02d}.webp").is_file() for i in range(1,8)), f"Missing {lang} images"
+    assert count >= 11, "Expected 10 locales and preview homepage"
+    print(f"Preview built: {target}, {count} noindex HTML pages")
+
 def build(sources, destination, root):
     if destination.exists():
         shutil.rmtree(destination)
@@ -55,6 +103,7 @@ def build(sources, destination, root):
                     raise ValueError(f"Missing legal page {page} in ZAPIKI")
                 links.append(f"{DOMAIN}/{slug}/{page}")
         print(f"OK {slug}: all source files mirrored")
+    build_preview(sources, destination)
     xml=['<?xml version="1.0" encoding="UTF-8"?>','<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     xml.extend(f"  <url><loc>{escape(link)}</loc></url>" for link in links)
     xml.append("</urlset>")
