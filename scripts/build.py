@@ -119,12 +119,37 @@ def build(sources, destination, root):
                 links.append(f"{DOMAIN}/{slug}/{page}")
         print(f"OK {slug}: all source files mirrored")
     build_preview(sources, destination)
-    xml=['<?xml version="1.0" encoding="UTF-8"?>','<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
-    xml.extend(f"  <url><loc>{escape(link)}</loc></url>" for link in links)
+    # The three product roots duplicate their localized /fr/index.html canonical.
+    # Keep the canonical localized pages and the ZAPIKI guides in a separate sitemap.
+    canonical_links = [url for url in links if url not in
+                       {f"{DOMAIN}/{slug}/" for slug in SITES}]
+    xml = ['<?xml version="1.0" encoding="UTF-8"?>',
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    xml.extend(f"  <url><loc>{escape(url)}</loc></url>" for url in canonical_links)
     xml.append("</urlset>")
-    (destination/"sitemap.xml").write_text("\n".join(xml)+"\n",encoding="utf-8")
-    (destination/"robots.txt").write_text("User-agent: *\nAllow: /\nSitemap: https://gogostudio.app/sitemap.xml\n",encoding="utf-8")
-    print(f"Ready: {destination}, {len(links)} sitemap URLs")
+    (destination/"sitemap-pages.xml").write_text("\n".join(xml)+"\n", encoding="utf-8")
+    # The mirrored source sitemaps already provide multilingual guide
+    # URLs and reciprocal hreflang annotations.
+    sitemap_urls = [
+        f"{DOMAIN}/sitemap-pages.xml",
+        f"{DOMAIN}/stopododo/sitemap.xml",
+        f"{DOMAIN}/clikospido/sitemap.xml",
+        f"{DOMAIN}/stopododo/video-sitemap.xml",
+    ]
+    for slug, file in (("stopododo", "sitemap.xml"),
+                       ("clikospido", "sitemap.xml"),
+                       ("stopododo", "video-sitemap.xml")):
+        if not (destination/slug/file).is_file():
+            raise FileNotFoundError(f"Required SEO sitemap missing: {slug}/{file}")
+    index = ['<?xml version="1.0" encoding="UTF-8"?>',
+             '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    index.extend(f"  <sitemap><loc>{escape(url)}</loc></sitemap>" for url in sitemap_urls)
+    index.append("</sitemapindex>")
+    (destination/"sitemap.xml").write_text("\n".join(index)+"\n", encoding="utf-8")
+    (destination/"robots.txt").write_text(
+        "User-agent: *\nAllow: /\nSitemap: https://gogostudio.app/sitemap.xml\n",
+        encoding="utf-8")
+    print(f"Ready: {destination}, {len(canonical_links)} canonical core URLs + product and video sitemaps")
 
 if __name__ == "__main__":
     parser=argparse.ArgumentParser()
