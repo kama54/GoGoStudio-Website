@@ -44,7 +44,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: kama54/Zapiki-Website
-          ref: design/zapiki-premium-seo-20261108
+          ref: feature/guides-zapiki-solutions-20261109
           path: sources/zapiki-preview
           persist-credentials: false
       - name: Assembler le site
