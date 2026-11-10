@@ -135,10 +135,12 @@ def build(sources, destination, root):
         f"{DOMAIN}/stopododo/sitemap.xml",
         f"{DOMAIN}/clikospido/sitemap.xml",
         f"{DOMAIN}/stopododo/video-sitemap.xml",
+        f"{DOMAIN}/clikospido/video-sitemap.xml",
     ]
     for slug, file in (("stopododo", "sitemap.xml"),
                        ("clikospido", "sitemap.xml"),
-                       ("stopododo", "video-sitemap.xml")):
+                       ("stopododo", "video-sitemap.xml"),
+                       ("clikospido", "video-sitemap.xml")):
         if not (destination/slug/file).is_file():
             raise FileNotFoundError(f"Required SEO sitemap missing: {slug}/{file}")
     index = ['<?xml version="1.0" encoding="UTF-8"?>',
