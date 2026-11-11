@@ -93,6 +93,9 @@ def build(sources, destination, root):
         mirror(sources/slug, target, repo, slug)
         if slug == "zapiki":
             unpack_zapiki_artwork(target)
+            if not (target / "download" / "index.html").is_file():
+                raise FileNotFoundError("ZAPIKI downloads landing page missing")
+            links.append(f"{DOMAIN}/zapiki/download/")
         links.append(f"{DOMAIN}/{slug}/")
         if slug in {"stopododo", "clikospido"}:
             for lang in LANGS:
