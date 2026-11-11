@@ -22,3 +22,7 @@ Les dix pages de vidéos promotionnelles de Stopododo possèdent désormais `Vid
 Le dépôt `GoGoStudio-Website` construit et publie le domaine `gogostudio.app` en récupérant les branches `main` de chacun des trois dépôts `*-Website`. Un déploiement GitHub Pages du dépôt d'une application ne suffit donc **pas** à mettre à jour son sous-dossier sur `gogostudio.app`.
 
 Après une modification de `Zapiki-Website`, `Stopododo-Website` ou `ClikoSpido-Website`, relancer le workflow **« Publier GoGoStudio et les trois sites »** dans ce dépôt (onglet Actions > Run workflow), ou déclencher une publication via un nouveau commit sur `main`. Une publication planifiée est également configurée chaque matin à 05 h 17 UTC.
+
+## Présentation des APK sur l’accueil ZAPIKI
+
+La page d’accueil ZAPIKI présente désormais le téléchargement sans Play Store dans une section autonome, conçue sur le modèle visuel « Un seul lecteur. Vos propres sources. ». La présentation mentionne les variantes Universal, ARM 32 bits et ARM 64 bits et renvoie à `/zapiki/download/`. La section est traduite en dix langues. Le texte auparavant ajouté sous les boutons principaux a été retiré.
