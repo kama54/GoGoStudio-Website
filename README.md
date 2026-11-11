@@ -26,3 +26,7 @@ Après une modification de `Zapiki-Website`, `Stopododo-Website` ou `ClikoSpido-
 ## Présentation des APK sur l’accueil ZAPIKI
 
 La page d’accueil ZAPIKI présente désormais le téléchargement sans Play Store dans une section autonome, conçue sur le modèle visuel « Un seul lecteur. Vos propres sources. ». La présentation mentionne les variantes Universal, ARM 32 bits et ARM 64 bits et renvoie à `/zapiki/download/`. La section est traduite en dix langues. Le texte auparavant ajouté sous les boutons principaux a été retiré.
+
+## Affichage mobile du téléchargement APK ZAPIKI
+
+Le bloc d'illustration de fichiers APK est masqué sur téléphone et tablette compacte (largeur CSS jusqu'à 800 px). Le titre, l'explication, les pastilles de compatibilité et le bouton de téléchargement restent visibles et espacés. Les dix pages linguistiques utilisent une URL CSS versionnée afin d'éviter les anciennes feuilles de style en cache. Le déploiement du domaine central recopie la branche principale de `Zapiki-Website`.
