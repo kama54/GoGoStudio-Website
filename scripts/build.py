@@ -29,6 +29,10 @@ def mirror(source, target, repo, slug):
         except UnicodeDecodeError:
             continue
         replacement = original.replace(old, new).replace(f"/{repo}/", f"/{slug}/")
+        # French is also served at /<slug>/. Give both URLs a single canonical
+        # and point all hreflang/structured-data/sitemap references at that URL.
+        replacement = replacement.replace(f"{DOMAIN}/{slug}/fr/index.html", f"{DOMAIN}/{slug}/")
+        replacement = replacement.replace(f"{DOMAIN}/{slug}/index.html", f"{DOMAIN}/{slug}/")
         if original != replacement:
             f.write_text(replacement, encoding="utf-8")
 
@@ -120,12 +124,18 @@ def build(sources, destination, root):
                 if not (target/page).is_file():
                     raise ValueError(f"Missing legal page {page} in ZAPIKI")
                 links.append(f"{DOMAIN}/{slug}/{page}")
-        print(f"OK {slug}: all source files mirrored")
+        for page in (target/"index.html", target/"fr"/"index.html"):
+            html = page.read_text(encoding="utf-8")
+            expected = f'rel="canonical" href="{DOMAIN}/{slug}/"'
+            if expected not in html:
+                raise ValueError(f"Canonical URL mismatch: {page}")
+        print(f"OK {slug}: all source files mirrored and root canonicals checked")
     build_preview(sources, destination)
-    # The three product roots duplicate their localized /fr/index.html canonical.
-    # Keep the canonical localized pages and the ZAPIKI guides in a separate sitemap.
+    # The French localized landing pages duplicate the product roots.
+    # Google has already chosen the shorter product roots for canonicalization.
+    # Submit those canonical roots, not the duplicated /fr/index.html URLs.
     canonical_links = [url for url in links if url not in
-                       {f"{DOMAIN}/{slug}/" for slug in SITES}]
+                       {f"{DOMAIN}/{slug}/fr/index.html" for slug in SITES}]
     xml = ['<?xml version="1.0" encoding="UTF-8"?>',
            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     xml.extend(f"  <url><loc>{escape(url)}</loc></url>" for url in canonical_links)
