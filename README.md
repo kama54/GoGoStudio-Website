@@ -30,3 +30,7 @@ La page d’accueil ZAPIKI présente désormais le téléchargement sans Play St
 ## Affichage mobile du téléchargement APK ZAPIKI
 
 Le bloc d'illustration de fichiers APK est masqué sur téléphone et tablette compacte (largeur CSS jusqu'à 800 px). Le titre, l'explication, les pastilles de compatibilité et le bouton de téléchargement restent visibles et espacés. Les dix pages linguistiques utilisent une URL CSS versionnée afin d'éviter les anciennes feuilles de style en cache. Le déploiement du domaine central recopie la branche principale de `Zapiki-Website`.
+
+## Mise à jour ZAPIKI du 12 novembre 2026
+
+Le téléchargement public ZAPIKI a été mis à jour de **1.0.0.0** vers **1.0.0.1** dans `kama54/Zapiki-Website` (branche `main`). La release officielle `kama54/Zapiki-Downloads/releases/tag/v1.0.0.1` contient les trois APK Release signés (Universal, ARM32 et ARM64). Ce commit de synchronisation déclenche l'assemblage et le déploiement du domaine principal `gogostudio.app`, qui recopie la version actuelle des sites applicatifs.
