@@ -34,3 +34,7 @@ Le bloc d'illustration de fichiers APK est masqué sur téléphone et tablette c
 ## Mise à jour ZAPIKI du 12 novembre 2026
 
 Le téléchargement public ZAPIKI a été mis à jour de **1.0.0.0** vers **1.0.0.1** dans `kama54/Zapiki-Website` (branche `main`). La release officielle `kama54/Zapiki-Downloads/releases/tag/v1.0.0.1` contient les trois APK Release signés (Universal, ARM32 et ARM64). Ce commit de synchronisation déclenche l'assemblage et le déploiement du domaine principal `gogostudio.app`, qui recopie la version actuelle des sites applicatifs.
+
+## Mise à jour des conditions d'utilisation — 15 novembre 2026
+
+Les pages `/zapiki/conditions.html`, `/clikospido/conditions.html` et `/stopododo/conditions.html` sont reprises des dépôts applicatifs et ont été actualisées avec l'identité de l'éditeur (BAEK CORNU Yeon Ju / GogoStudio.app), ses coordonnées professionnelles et les modalités Free/Premium propres à chaque application. Ce commit relance la synchronisation et la publication des trois pages sur le domaine principal.
