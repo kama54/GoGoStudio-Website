@@ -129,12 +129,19 @@ def build(sources, destination, root):
             expected = f'rel="canonical" href="{DOMAIN}/{slug}/"'
             if expected not in html:
                 raise ValueError(f"Canonical URL mismatch: {page}")
+        # Enforce noindex also for translated conditions pages on every future build.
+        for terms in target.rglob("conditions.html"):
+            html_terms = terms.read_text(encoding="utf-8")
+            if not re.search(r'<meta\s+name=["\']robots["\']\s+content=["\'][^"\']*noindex', html_terms, re.I):
+                raise ValueError(f"Missing noindex directive: {terms}")
         print(f"OK {slug}: all source files mirrored and root canonicals checked")
     build_preview(sources, destination)
     # The French localized landing pages duplicate the product roots.
     # Google has already chosen the shorter product roots for canonicalization.
     # Submit those canonical roots, not the duplicated /fr/index.html URLs.
-    canonical_links = [url for url in links if url not in
+    # Do not submit terms pages to sitemaps: they remain accessible via direct links,
+    # but are intentionally excluded from search engine results.
+    canonical_links = [url for url in links if "conditions.html" not in url and url not in
                        {f"{DOMAIN}/{slug}/fr/index.html" for slug in SITES}]
     xml = ['<?xml version="1.0" encoding="UTF-8"?>',
            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
