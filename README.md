@@ -37,4 +37,4 @@ Le téléchargement public ZAPIKI a été mis à jour de **1.0.0.0** vers **1.0.
 
 ## Mise à jour des conditions d'utilisation — 15 novembre 2026
 
-Les pages `/zapiki/conditions.html`, `/clikospido/conditions.html` et `/stopododo/conditions.html` sont reprises des dépôts applicatifs et ont été actualisées avec l'identité de l'éditeur (BAEK CORNU Yeon Ju / GogoStudio.app), ses coordonnées professionnelles et les modalités Free/Premium propres à chaque application. Ce commit relance la synchronisation et la publication des trois pages sur le domaine principal.
+Les pages `/zapiki/conditions.html`, `/clikospido/conditions.html` et `/stopododo/conditions.html` sont reprises des dépôts applicatifs et ont été actualisées avec l'identité de l'éditeur (BAEK CORNU Yeon Ju / GogoStudio.app), ses coordonnées professionnelles et les modalités Free/Premium propres à chaque application. Les dix déclinaisons linguistiques des conditions de Stopododo et celles de ClikoSpido ont aussi été harmonisées. Ce commit relance la synchronisation et la publication des pages sur le domaine principal.
