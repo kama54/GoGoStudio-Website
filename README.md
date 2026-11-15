@@ -38,3 +38,7 @@ Le téléchargement public ZAPIKI a été mis à jour de **1.0.0.0** vers **1.0.
 ## Mise à jour des conditions d'utilisation — 15 novembre 2026
 
 Les pages `/zapiki/conditions.html`, `/clikospido/conditions.html` et `/stopododo/conditions.html` sont reprises des dépôts applicatifs et ont été actualisées avec l'identité de l'éditeur (BAEK CORNU Yeon Ju / GogoStudio.app), ses coordonnées professionnelles et les modalités Free/Premium propres à chaque application. Les dix déclinaisons linguistiques des conditions de Stopododo et celles de ClikoSpido ont aussi été harmonisées. Ce commit relance la synchronisation et la publication des pages sur le domaine principal.
+
+## Assistance Google Play — conditions d'utilisation (15 novembre 2026)
+
+Les trois applications disposent désormais dans leurs conditions d'utilisation de liens directs vers l'aide Google Play pour les remboursements, et, pour ZAPIKI et ClikoSpido, la gestion des abonnements. Les pages expliquent que l'assistance Google Play n'est pas un médiateur de la consommation et rappellent l'adresse de contact de GogoStudio.app. Les dix versions linguistiques des conditions de Stopododo et de ClikoSpido ont été complétées. Ce commit relance la publication du site unifié.
