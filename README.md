@@ -42,3 +42,7 @@ Les pages `/zapiki/conditions.html`, `/clikospido/conditions.html` et `/stopodod
 ## Assistance Google Play — conditions d'utilisation (15 novembre 2026)
 
 Les trois applications disposent désormais dans leurs conditions d'utilisation de liens directs vers l'aide Google Play pour les remboursements, et, pour ZAPIKI et ClikoSpido, la gestion des abonnements. Les pages expliquent que l'assistance Google Play n'est pas un médiateur de la consommation et rappellent l'adresse de contact de GogoStudio.app. Les dix versions linguistiques des conditions de Stopododo et de ClikoSpido ont été complétées. Ce commit relance la publication du site unifié.
+
+## Synchronisation SEO ClikoSpido — 19 novembre 2026
+
+Synchronisation du site unifié pour publier les balises SEO et les titres visibles mis à jour dans `kama54/ClikoSpido-Website` : intitulé `ClikoSpido Launcher` dans le H1 et le titre HTML, ainsi que liens de navigation consolidés vers `/clikospido/`. Les URLs canoniques, le sitemap et les pages légales restent inchangés.
