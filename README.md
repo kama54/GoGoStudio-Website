@@ -46,3 +46,7 @@ Les trois applications disposent désormais dans leurs conditions d'utilisation 
 ## Synchronisation SEO ClikoSpido — 19 novembre 2026
 
 Synchronisation du site unifié pour publier les balises SEO et les titres visibles mis à jour dans `kama54/ClikoSpido-Website` : intitulé `ClikoSpido Launcher` dans le H1 et le titre HTML, ainsi que liens de navigation consolidés vers `/clikospido/`. Les URLs canoniques, le sitemap et les pages légales restent inchangés.
+
+## Synchronisation des nouveaux tarifs ClikoSpido — 20 novembre 2026
+
+Publication du site unifié après la modification de `ClikoSpido-Website` : prix Premium **en France** de **2,99 €/mois** (abonnement) ou **29,99 € à vie** (achat unique). Les pages françaises, coréennes, les autres langues et les conditions d'utilisation proviennent du dépôt source mis à jour. Le prix effectivement appliqué hors de France est celui indiqué par Google Play avant achat. Cette modification sur `main` relance l'assemblage et la publication GitHub Pages de `gogostudio.app`.
