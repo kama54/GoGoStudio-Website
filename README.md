@@ -13,6 +13,18 @@ L'activation de GitHub Pages et la configuration du domaine dans Settings > Page
 
 Les guides du dépôt source `ClikoSpido-Website` présentent désormais, en dix langues, les solutions concrètes proposées par ClikoSpido Launcher (grandes touches, proches avec photos, Mode Famille). Chaque guide conserve ses conseils Android et ajoute un lien direct vers Google Play. Les guides sont intégrés automatiquement au site officiel `https://gogostudio.app/clikospido/` à chaque publication GitHub Pages.
 
+## Publication du centre d’aide ClikoSpido — 21 novembre 2026
+
+Le dépôt source `ClikoSpido-Website` contient cinq nouvelles pages françaises sous
+`fr/guides/` : `premiers-pas.html`, `utiliser-clikospido.html`,
+`mode-famille.html`, `diagnostic-telephone.html` et
+`questions-frequentes.html` (FAQ de 24 questions).
+
+Leur adresse publique est **https://gogostudio.app/clikospido/fr/guides/**,
+avec les fichiers HTML sous ce chemin. La synchronisation nécessite une
+nouvelle publication de **ce dépôt central** après chaque mise à jour du
+dépôt source. Les pages légales et les autres applications sont conservées.
+
 ## Vidéos Stopododo : balisage Google (10 novembre 2026)
 
 Les dix pages de vidéos promotionnelles de Stopododo possèdent désormais `VideoObject.uploadDate` (date ISO 8601 sourcée du premier commit public des MP4, 31 octobre 2026). Cela corrige l'alerte Search Console « Champ uploadDate manquant ». Aucun fichier vidéo, visuel ou contenu commercial n'est modifié. Le déploiement de `gogostudio.app` reprend les pages du dépôt source `Stopododo-Website`.
