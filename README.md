@@ -62,3 +62,7 @@ Synchronisation du site unifié pour publier les balises SEO et les titres visib
 ## Synchronisation des nouveaux tarifs ClikoSpido — 20 novembre 2026
 
 Publication du site unifié après la modification de `ClikoSpido-Website` : prix Premium **en France** de **2,99 €/mois** (abonnement) ou **29,99 € à vie** (achat unique). Les pages françaises, coréennes, les autres langues et les conditions d'utilisation proviennent du dépôt source mis à jour. Le prix effectivement appliqué hors de France est celui indiqué par Google Play avant achat. Cette modification sur `main` relance l'assemblage et la publication GitHub Pages de `gogostudio.app`.
+
+## Centre d’aide ClikoSpido multilingue — 21 novembre 2026
+
+Synchronisation des cinq guides officiels et de la FAQ de 24 questions dans les dix langues du site (FR, EN, ES, IT, DE, NL, PT, AR, JA, KO). Les 50 pages possèdent leurs propres URL canoniques et liens hreflang réciproques. La recherche est localisée et la version arabe est adaptée au sens de lecture RTL. Source : ClikoSpido-Website, commit c370a0e8833c792f0e10f7dd5011ab604153e983. Publication sur https://gogostudio.app/clikospido/ ; pages légales inchangées.
