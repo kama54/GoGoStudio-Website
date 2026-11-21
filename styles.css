@@ -8,3 +8,7 @@
   .brand{font-size:18px;letter-spacing:-.75px}
   .hero-caption{right:3%;font-size:9px;letter-spacing:.045em;white-space:nowrap}
 }
+
+/* Bouton Google Play pour ClikoSpido, sans changer les autres cartes. */
+.card-link.card-link-play{align-items:center;padding:12px 14px;margin:2px 0 12px;background:#eaf4ff;border:1px solid #c7def9;border-radius:11px;color:#164778;line-height:1.35}
+.card-link.card-link-play:hover{background:#dcedff}
