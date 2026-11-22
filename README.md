@@ -66,3 +66,7 @@ Publication du site unifié après la modification de `ClikoSpido-Website` : pri
 ## Centre d’aide ClikoSpido multilingue — 21 novembre 2026
 
 Synchronisation des cinq guides officiels et de la FAQ de 24 questions dans les dix langues du site (FR, EN, ES, IT, DE, NL, PT, AR, JA, KO). Les 50 pages possèdent leurs propres URL canoniques et liens hreflang réciproques. La recherche est localisée et la version arabe est adaptée au sens de lecture RTL. Source : ClikoSpido-Website, commit c370a0e8833c792f0e10f7dd5011ab604153e983. Publication sur https://gogostudio.app/clikospido/ ; pages légales inchangées.
+
+## Affiche ClikoSpido A4 à télécharger — 22 novembre 2026
+
+Le dépôt source ClikoSpido-Website publie désormais la section française « Faites découvrir ClikoSpido autour de vous » sur /clikospido/ et /clikospido/fr/index.html. Le PDF original (A4, une page, 897 634 octets) se trouve sous /clikospido/assets/downloads/ClikoSpido_A4_pret_a_imprimer.pdf et l'aperçu WebP optimisé est placé au même emplacement. Les neuf autres accueils linguistiques et les pages légales ne sont pas modifiés. Cette publication resynchronise les trois sites et déploie le domaine principal. Source : commit 63f08e6666a9210903ced140cb0ca18e1cb95da4.
