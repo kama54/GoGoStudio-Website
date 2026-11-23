@@ -82,11 +82,76 @@ def build_preview(sources, destination):
     assert count >= 11, "Expected 10 locales and preview homepage"
     print(f"Preview built: {target}, {count} noindex HTML pages")
 
+
+def update_website_analytics_notices(destination):
+    """Keep website-only privacy notices in the published mirrors accurate.
+
+    Original app repositories and their app-specific privacy statements stay intact.
+    """
+    details = '<a href="/mesure-audience.html">GogoStudio.app</a>'
+    notes = {
+        "fr": "Le site Web ne diffuse aucune publicité. Sur le site Web uniquement, Google Analytics peut mesurer la fréquentation et les clics vers Google Play après votre consentement explicite. Vous pouvez refuser ou retirer cet accord à tout moment. Détails : ",
+        "en": "The website has no advertising. On the website only, Google Analytics may measure visits and Google Play clicks after your explicit consent. You can decline or withdraw it at any time. Details: ",
+        "es": "El sitio web no muestra publicidad. Solo en el sitio web, Google Analytics puede medir visitas y clics a Google Play tras tu consentimiento expreso. Puedes rechazarlo o retirarlo cuando quieras. Detalles: ",
+        "it": "Il sito web non contiene pubblicità. Solo sul sito web, Google Analytics può misurare visite e clic verso Google Play dopo il tuo consenso esplicito, revocabile in qualsiasi momento. Dettagli: ",
+        "de": "Die Website enthält keine Werbung. Nur auf der Website kann Google Analytics nach ausdrücklicher Einwilligung Besuche und Google-Play-Klicks messen. Sie können ablehnen oder widerrufen. Details: ",
+        "nl": "De website bevat geen advertenties. Alleen op de website kan Google Analytics na uw uitdrukkelijke toestemming bezoeken en klikken naar Google Play meten. U kunt weigeren of uw keuze intrekken. Details: ",
+        "pt": "O site não contém publicidade. Apenas no site, o Google Analytics pode medir visitas e cliques para o Google Play após consentimento expresso, que pode ser recusado ou retirado. Detalhes: ",
+        "ar": "لا يعرض الموقع إعلانات. على الموقع فقط، قد يقيس Google Analytics الزيارات والنقرات إلى Google Play بعد موافقتك الصريحة. يمكنك الرفض أو سحب الموافقة في أي وقت. التفاصيل: ",
+        "ja": "Webサイトに広告はありません。Webサイトでのみ、明示的な同意後にGoogle Analyticsで訪問とGoogle Playへのクリックを計測することがあります。拒否・撤回はいつでも可能です。詳細: ",
+        "ko": "웹사이트에는 광고가 없습니다. 웹사이트에서만 명시적 동의 후 Google Analytics가 방문과 Google Play 클릭을 측정할 수 있습니다. 언제든 거부하거나 철회할 수 있습니다. 자세히: ",
+    }
+    stop_pages = sorted((destination / "stopododo").rglob("confidentialite.html"))
+    if len(stop_pages) < 11:
+        raise ValueError(f"Expected 11 Stopododo privacy documents; found {len(stop_pages)}")
+    for page in stop_pages:
+        language = page.parent.name if page.parent.name in LANGS else "fr"
+        html = page.read_text(encoding="utf-8")
+        pattern = r'(<h2>\s*10\.[^<]*</h2>\s*)<p>.*?</p>'
+        replacement = lambda match: match.group(1) + "<p>" + notes[language] + details + ".</p>"
+        changed, count = re.subn(pattern, replacement, html, count=1, flags=re.I | re.S)
+        if count != 1:
+            raise ValueError(f"Could not locate Stopododo website privacy paragraph: {page}")
+        page.write_text(changed, encoding="utf-8")
+    zapiki = destination / "zapiki" / "confidentialite.html"
+    html = zapiki.read_text(encoding="utf-8")
+    changed, count = re.subn(
+        r'(<h2>\s*9\.[^<]*</h2>\s*)<p>.*?</p>',
+        lambda match: match.group(1) + "<p>" + notes["fr"] + details + ".</p>",
+        html, count=1, flags=re.I | re.S,
+    )
+    if count != 1:
+        raise ValueError("Could not locate ZAPIKI website privacy paragraph")
+    zapiki.write_text(changed, encoding="utf-8")
+    print(f"OK: privacy notices synchronized in {len(stop_pages)} Stopododo pages and ZAPIKI")
+
+
+def install_analytics_on_site(destination):
+    """Add one centrally managed, consent-gated GA4 integration to every public page."""
+    snippet = '<script defer src="/analytics-consent.js"></script>'
+    count = 0
+    for page in destination.rglob("*.html"):
+        if "apercu-zapiki" in page.relative_to(destination).parts:
+            continue  # Never track unpublished previews.
+        html = page.read_text(encoding="utf-8")
+        if snippet in html:
+            continue
+        changed, n = re.subn(r'</head\s*>', lambda match: snippet + match.group(0),
+                             html, count=1, flags=re.I)
+        if n != 1:
+            raise ValueError(f"Missing closing head for analytics injection: {page}")
+        page.write_text(changed, encoding="utf-8")
+        count += 1
+    if count < 300:
+        raise ValueError(f"Too few published HTML pages instrumented: {count}")
+    print(f"OK: consent-based GA4 enabled for {count} public HTML pages")
+
+
 def build(sources, destination, root):
     if destination.exists():
         shutil.rmtree(destination)
     destination.mkdir(parents=True)
-    for name in ("index.html", "styles.css", "app.js", "favicon.svg"):
+    for name in ("index.html", "styles.css", "app.js", "favicon.svg", "analytics-consent.js", "mesure-audience.html"):
         shutil.copy2(root/name, destination/name)
     if (root/"assets").is_dir():
         shutil.copytree(root/"assets", destination/"assets")
@@ -136,6 +201,8 @@ def build(sources, destination, root):
                 raise ValueError(f"Missing noindex directive: {terms}")
         print(f"OK {slug}: all source files mirrored and root canonicals checked")
     build_preview(sources, destination)
+    update_website_analytics_notices(destination)
+    install_analytics_on_site(destination)
     # The French localized landing pages duplicate the product roots.
     # Google has already chosen the shorter product roots for canonicalization.
     # Submit those canonical roots, not the duplicated /fr/index.html URLs.
