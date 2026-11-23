@@ -70,3 +70,9 @@ Synchronisation des cinq guides officiels et de la FAQ de 24 questions dans les 
 ## Affiche ClikoSpido A4 à télécharger — 22 novembre 2026
 
 Le dépôt source ClikoSpido-Website publie désormais la section française « Faites découvrir ClikoSpido autour de vous » sur /clikospido/ et /clikospido/fr/index.html. Le PDF original (A4, une page, 897 634 octets) se trouve sous /clikospido/assets/downloads/ClikoSpido_A4_pret_a_imprimer.pdf et l'aperçu WebP optimisé est placé au même emplacement. Les neuf autres accueils linguistiques et les pages légales ne sont pas modifiés. Cette publication resynchronise les trois sites et déploie le domaine principal. Source : commit 63f08e6666a9210903ced140cb0ca18e1cb95da4.
+
+## Publication publique ZAPIKI sur Google Play — 23 novembre 2026
+
+ZAPIKI est désormais disponible en production sur Google Play (`com.zapiki.tv`). Les onze accueils du site ZAPIKI annoncent la disponibilité immédiate, remplacent les appels à l'action de lancement par des liens directs Google Play, et indiquent `https://schema.org/InStock` dans leurs données structurées. La page `/zapiki/download/` privilégie le Play Store tout en conservant les trois APK officiels pour les appareils compatibles sans Play Store. Les textes commerciaux et légaux traduits ont été corrigés.
+
+L'accueil central présente maintenant un lien de téléchargement Google Play pour chacune des trois applications publiées : Stopododo, ClikoSpido Launcher et ZAPIKI. Ce commit sur `main` déclenche la publication du domaine unifié et la récupération de la dernière branche `main` de chaque dépôt `*-Website`.
